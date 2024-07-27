@@ -1,0 +1,27 @@
+{
+    "nome": "copa do brasil",
+    "jogos": [
+        "sport",
+        "palmeiras",
+        "corinthians",
+        "flamengo"
+    ],
+    "campeão": "são paulo",
+    "ano": 2023,
+    "premio": 640.25,
+    "ganhou_em_casa": true,
+    "artilheiros": [
+        {
+            "nome": "Pedro",
+            "gols": 5
+        },
+        {
+            "nome": "Tiquinho Soares",
+            "gols": 5
+        },
+        {
+            "nome": "Lorran",
+            "gols": 5
+        }
+    ]
+}
