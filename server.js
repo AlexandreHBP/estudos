@@ -1,9 +1,25 @@
+// carregamento de bibliotecas
 const express = require('express');
 const fs = require('fs');
+const mysql = require('mysql2')
 
+// configuração de bibliotecas
 const app = express();
 const PORT = process.env.PORT || 3000;
-
+app.use(express.json());
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'ale',
+    password: 'Senha@1234',
+    database: 'estudos_schema'
+});
+connection.connect(err => {
+    if (err) {
+        console.error('Erro ao conectar ao banco de dados:', err.stack);
+        return;
+    }
+    console.log('Conectado ao banco de dados como id' + connection.threadId);
+});
 app.get('/data', (req, res) => {
     fs.readFile('./copa_do_brasil_2023.json', 'utf8', (err, data) => {
         if (err) {
@@ -37,6 +53,31 @@ app.get('/multiplica', (req, res) => {
     const multiplica = a * b;
     res.send(`O resultado de ${a} e ${b} é ${multiplica}`)
 });
+app.get('/times', (req, res) => {
+    const query = "SELECT * FROM estudos_schema.times";
+    connection.query(query, (err, results) => {
+        if (err) {
+            res.status(500).send('Erro ao buscar dados do banco de dados');
+            return;
+        }
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(results));
+    })
+})
+app.post('/times', (req, res) => {
+    const { id, nome_time, titulos } = req.body;
+    if (!id || !nome_time || !titulos) {
+        return res.status(400).send('Id, nome_time e titulos são obrigatórios');
+    }
+    const query = 'INSERT INTO estudos_schema.times (id, nome_time, titulos) VALUES (?, ?, ?)';
+    connection.query( query, [id, nome_time, titulos], (err, results) => {
+        if (err) {
+            return res.status(500).send('Erro ao inserir o time no banco de dados'+ err.message);
+        }
+        res.status(201).send('Time inserido com sucesso');
+    })
+})
+
 
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
