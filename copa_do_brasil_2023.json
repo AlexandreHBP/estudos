@@ -6,10 +6,11 @@
         "corinthians",
         "flamengo"
     ],
-    "campeão": "são paulo",
+    "campeao": "são paulo",
     "ano": 2023,
     "premio": 640.25,
     "ganhou_em_casa": true,
+    "data_da_final" : "2023-09-24T00:00:00Z" ,
     "artilheiros": [
         {
             "nome": "Pedro",
