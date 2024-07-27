@@ -70,30 +70,46 @@ app.post('/times', (req, res) => {
         return res.status(400).send('Id, nome_time e titulos são obrigatórios');
     }
     const query = 'INSERT INTO estudos_schema.times (id, nome_time, titulos) VALUES (?, ?, ?)';
-    connection.query( query, [id, nome_time, titulos], (err, results) => {
+    connection.query(query, [id, nome_time, titulos], (err, results) => {
         if (err) {
-            return res.status(500).send('Erro ao inserir o time no banco de dados'+ err.message);
+            return res.status(500).send('Erro ao inserir o time no banco de dados' + err.message);
         }
         res.status(201).send('Time inserido com sucesso');
     })
 })
-app.delete('/times/:id', (req, res)=> {
-    const{ id } = req.params;
+app.delete('/times/:id', (req, res) => {
+    const { id } = req.params;
 
     const query = 'DELETE FROM estudos_schema.times WHERE id = ?';
-    connection.query(query, [id], (err, results)=> {
+    connection.query(query, [id], (err, results) => {
         if (err) {
-            return res.status(500).send('Erro ao deletar o time no banco de dados'+err.message);
+            return res.status(500).send('Erro ao deletar o time no banco de dados' + err.message);
         }
-        if(results.affectedRows === 0) {
+        if (results.affectedRows === 0) {
             return res.status(404).send('Time não encontrado');
         }
         res.send('Time deletado com sucesso');
     })
 })
+app.put('/times/:id', (req, res) => {
+    const { id } = req.params;
+    const { nome_time, titulos } = req.body;
 
+    if (!nome_time || !titulos) {
+        return res.status(400).send("Nome e titulos são obrigatórios");
+    }
 
-
+    const query = 'UPDATE estudos_schema.times SET nome_time = ?, titulos = ? WHERE id = ?';
+    connection.query(query, [nome_time, titulos, id], (err, results) => {
+        if (err) {
+            return res.status(500).send('Erro ao atualizar o time no banco de dados');
+        }
+        if (results.affectedRows === 0) {
+            return res.status(404).send('Time não encontrado');
+        }
+        res.send('Time atualizado com sucesso');
+    })
+})
 
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
