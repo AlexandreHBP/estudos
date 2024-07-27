@@ -77,6 +77,22 @@ app.post('/times', (req, res) => {
         res.status(201).send('Time inserido com sucesso');
     })
 })
+app.delete('/times/:id', (req, res)=> {
+    const{ id } = req.params;
+
+    const query = 'DELETE FROM estudos_schema.times WHERE id = ?';
+    connection.query(query, [id], (err, results)=> {
+        if (err) {
+            return res.status(500).send('Erro ao deletar o time no banco de dados'+err.message);
+        }
+        if(results.affectedRows === 0) {
+            return res.status(404).send('Time não encontrado');
+        }
+        res.send('Time deletado com sucesso');
+    })
+})
+
+
 
 
 app.listen(PORT, () => {
