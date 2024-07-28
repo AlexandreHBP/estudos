@@ -2,10 +2,11 @@
 const express = require('express');
 const fs = require('fs');
 const mysql = require('mysql2')
-
+const cors = require('cors')
 // configuração de bibliotecas
 const app = express();
 const PORT = process.env.PORT || 3000;
+app.use(cors())
 app.use(express.json());
 const connection = mysql.createConnection({
     host: 'localhost',
